@@ -155,6 +155,12 @@ Source: CRAN
 Version: 0.12
 Hash: 98a37137be334916af8af26354bb37e9
 
+Package: openxlsx
+Source: CRAN
+Version: 4.2.5
+Hash: b0289aded25acfe1c15680c5e0ecd897
+Requires: Rcpp, stringi, zip
+
 Package: packrat
 Source: CRAN
 Version: 0.8.1
@@ -243,6 +249,17 @@ Source: CRAN
 Version: 0.1.7
 Hash: d093478ac90064e670cd4bf1a99b47b6
 
+Package: stringi
+Source: CRAN
+Version: 1.7.8
+Hash: bb07248d1e4497a0e5d2ff621544bb08
+
+Package: stringr
+Source: CRAN
+Version: 1.4.0
+Hash: 67da32dbb2a7a16f2ef124336358e54a
+Requires: glue, magrittr, stringi
+
 Package: tibble
 Source: CRAN
 Version: 3.1.7
@@ -289,3 +306,8 @@ Package: xtable
 Source: CRAN
 Version: 1.8-4
 Hash: dc0d47261b678d26032363bebd050540
+
+Package: zip
+Source: CRAN
+Version: 2.2.0
+Hash: 7a2bdad5f5de31294483fb4ac4e1e0c0
