@@ -30,6 +30,7 @@ useShinyjs(),
 server <- function(input, output, session) {
 #-----Vars-----
     processed_data <- list()
+    shinyjs::disable("dl_button")
 #-----Closures-----
     batcher <- local({
         file_int <- 1
@@ -146,6 +147,7 @@ server <- function(input, output, session) {
                 )
             }
         )
+        shinyjs::enable("dl_button")
     })
 }
 
