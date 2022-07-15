@@ -50,7 +50,7 @@ server <- function(input, output, session) {
         list(
             view_data = function(format) {
                 if (format == "csv") {
-                    data <<- read_csv(
+                    data <<- readr::read_csv(
                         input$data_file$datapath[batcher$file_int()],
                         col_names = c(as.character(1:13)))
                 }
@@ -129,7 +129,7 @@ server <- function(input, output, session) {
     observeEvent(input$go_button, {
         while (batcher$file_int() <= length(input$data_file$datapath)) {
             datahandler$view_data(
-                format = file_ext(input$data_file$datapath)[batcher$file_int()])
+                format = tools::file_ext(input$data_file$datapath)[batcher$file_int()])
             datahandler$fetch_exp()
             processed_data[[batcher$file_int()]] <<- datahandler$calculate_bret()
             batcher$increment_file_int()
