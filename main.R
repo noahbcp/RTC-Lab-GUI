@@ -4,6 +4,7 @@ library(shinyjs)
 library(readr)
 library(openxlsx)
 library(stringr)
+library(tools)
 options(readr.show_col_types = FALSE)
 
 ui <- fluidPage(
@@ -12,7 +13,7 @@ useShinyjs(),
         fileInput(inputId = "data_file",
                   label = "Upload data:",
                   multiple = TRUE,
-                  accept = ".csv"),
+                  accept = c(".csv", ".xlsx")),
         tableOutput(outputId = "uploaded_files"),
         numericInput(inputId = "n_cycles",
                      label = "Number of cycles:",
@@ -47,10 +48,22 @@ server <- function(input, output, session) {
         pos_col <- c()
         n_cycles <- c()
         list(
-            view_data = function() {
-                data <<- read_csv(
-                    input$data_file$datapath[batcher$file_int()],
-                    col_names = c(as.character(1:13)))
+            view_data = function(format) {
+                if (format == "csv") {
+                    data <<- read_csv(
+                        input$data_file$datapath[batcher$file_int()],
+                        col_names = c(as.character(1:13)))
+                }
+                if (format == "xlsx") {
+                    data <- openxlsx::read.xlsx(
+                        input$data_file$datapath[batcher$file_int()],
+                        colNames = FALSE,
+                        skipEmptyRows = FALSE,
+                        rows = c(2:1048576) #max number of possible rows
+                    )
+                    colnames(data) <- c(as.character(1:13))
+                    data <<- data
+                }
             },
             find_data = function() {
                 return((which(data == "A", arr.ind = TRUE))[1])
@@ -115,7 +128,8 @@ server <- function(input, output, session) {
     })
     observeEvent(input$go_button, {
         while (batcher$file_int() <= length(input$data_file$datapath)) {
-            datahandler$view_data()
+            datahandler$view_data(
+                format = file_ext(input$data_file$datapath)[batcher$file_int()])
             datahandler$fetch_exp()
             processed_data[[batcher$file_int()]] <<- datahandler$calculate_bret()
             batcher$increment_file_int()
