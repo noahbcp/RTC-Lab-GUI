@@ -1,5 +1,4 @@
 library(shiny)
-library(shinyBS)
 library(shinyjs)
 library(readr)
 library(openxlsx)
@@ -8,8 +7,9 @@ library(tools)
 options(readr.show_col_types = FALSE)
 
 ui <- fluidPage(
-useShinyjs(),
-    verticalLayout(
+    useShinyjs(),
+    titlePanel("Camyen Analysis", "Camyen 👨‍🔬"),
+    div(style = "padding: 1em; margin: 1em",
         fileInput(inputId = "data_file",
                   label = "Upload data:",
                   multiple = TRUE,
@@ -18,11 +18,11 @@ useShinyjs(),
         numericInput(inputId = "n_cycles",
                      label = "Number of cycles:",
                      value = 60),
-        bsButton(inputId = "go_button",
-                 label = "Process",
-                 disabled = TRUE),
-        downloadButton(outputId = "dl_button",
-                       label = "Download!"
+        div(style = "padding-left: 3em;",
+            actionButton(inputId = "go_button",
+                         label = "Process",
+                         icon = icon("paper-plane")),
+            downloadButton(outputId = "dl_button")
         )
     )
 )
@@ -119,7 +119,8 @@ server <- function(input, output, session) {
     },
     striped = TRUE,
     rownames = TRUE,
-    colnames = FALSE)
+    colnames = FALSE,
+    width = "100%")
     observe({
         if (is.null(input$data_file)) {
             shinyjs::disable("go_button")
