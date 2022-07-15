@@ -3,6 +3,7 @@ library(shinyBS)
 library(shinyjs)
 library(readr)
 library(openxlsx)
+library(stringr)
 options(readr.show_col_types = FALSE)
 
 ui <- fluidPage(
@@ -119,12 +120,16 @@ server <- function(input, output, session) {
             processed_data[[batcher$file_int()]] <<- datahandler$calculate_bret()
             batcher$increment_file_int()
         }
+        names(processed_data) <- c(str_trunc(input$data_file$name, 31, "right"))
         output$dl_button <- downloadHandler(
             filename = function() {
-                paste(Sys.Date(), ".xlsx", sep = "")
+                paste("camyen-", Sys.Date(), ".xlsx", sep = "")
             },
-            content = function() {
-                openxlsx::buildWorkbook(processed_data)
+            content = function(file) {
+                openxlsx::saveWorkbook(
+                    wb = openxlsx::buildWorkbook(processed_data),
+                    file = file
+                )
             }
         )
     })
