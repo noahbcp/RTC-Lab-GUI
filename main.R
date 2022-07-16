@@ -13,7 +13,7 @@ ui <- fluidPage(
             titlePanel("Camyen Analysis", "Camyen 👨‍🔬"),
             hr(style = "width: 420px;"),
             fileInput(inputId = "data_file",
-                      label = "Upload data:",
+                      label = "Upload data (.xlsx & .csv permitted):",
                       multiple = TRUE,
                       accept = c(".csv", ".xlsx"),
                       width = "100%"),
