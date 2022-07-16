@@ -32,7 +32,7 @@ ui <- fluidPage(
             div(style = "text-align: center;",
                 tags$a(
                     style = "color: black; opacity: 0.6; text-decoration: underline;",
-                    href = "https://www.nbcp.xyz", "nbcp.xyz"
+                    href = "https://nbcp.xyz", "nbcp.xyz"
                 )
             )
         )
