@@ -52,6 +52,9 @@ server <- function(input, output, session) {
             },
             increment_file_int = function() {
                 file_int <<- file_int + 1
+            },
+            reset_int = function() {
+                file_int <<- 1
             }
         )
     })
@@ -141,26 +144,36 @@ server <- function(input, output, session) {
         }
     })
     observeEvent(input$go_button, {
+        batcher$reset_int()
+        output$dl_button <<- downloadHandler(
+            filename = function() {},
+            content = function() {}
+        )
         while (batcher$file_int() <= length(input$data_file$datapath)) {
-            datahandler$view_data(
-                format = tools::file_ext(input$data_file$datapath)[batcher$file_int()])
+            datahandler$view_data(format = tools::file_ext(input$data_file$datapath)[batcher$file_int()])
             datahandler$fetch_exp()
-            processed_data[[batcher$file_int()]] <<- datahandler$calculate_bret()
+            processed_data[[batcher$file_int()]] <- datahandler$calculate_bret()
             batcher$increment_file_int()
         }
         names(processed_data) <- c(str_trunc(input$data_file$name, 31, "right"))
-        output$dl_button <- downloadHandler(
+        output$dl_button <<- downloadHandler(
             filename = function() {
                 paste("camyen-", Sys.Date(), ".xlsx", sep = "")
             },
             content = function(file) {
                 openxlsx::saveWorkbook(
                     wb = openxlsx::buildWorkbook(processed_data),
-                    file = file
+                    file = file,
+                    overwrite = TRUE
                 )
             }
         )
         shinyjs::enable("dl_button")
+        shinyjs::disable("go_button")
+    })
+    observeEvent(input$data_file, {
+        shinyjs::disable("dl_button")
+        shinyjs::enable("go_button")
     })
 }
 
