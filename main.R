@@ -27,6 +27,13 @@ ui <- fluidPage(
                              label = "Process",
                              icon = icon("paper-plane")),
                 downloadButton(outputId = "dl_button")
+            ),
+            hr(style = "width: 420px;"),
+            div(style = "text-align: center;",
+                tags$a(
+                    style = "color: black; opacity: 0.6; text-decoration: underline;",
+                    href = "https://www.nbcp.xyz", "nbcp.xyz"
+                )
             )
         )
     )
