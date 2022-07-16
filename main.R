@@ -8,21 +8,26 @@ options(readr.show_col_types = FALSE)
 
 ui <- fluidPage(
     useShinyjs(),
-    titlePanel("Camyen Analysis", "Camyen 👨‍🔬"),
-    div(style = "padding: 1em; margin: 1em",
-        fileInput(inputId = "data_file",
-                  label = "Upload data:",
-                  multiple = TRUE,
-                  accept = c(".csv", ".xlsx")),
-        tableOutput(outputId = "uploaded_files"),
-        numericInput(inputId = "n_cycles",
-                     label = "Number of cycles:",
-                     value = 60),
-        div(style = "padding-left: 3em;",
-            actionButton(inputId = "go_button",
-                         label = "Process",
-                         icon = icon("paper-plane")),
-            downloadButton(outputId = "dl_button")
+    verticalLayout(
+        div(style = "width: 420px; margin: auto; padding: 10px; position: relative;",
+            titlePanel("Camyen Analysis", "Camyen 👨‍🔬"),
+            hr(style = "width: 420px;"),
+            fileInput(inputId = "data_file",
+                      label = "Upload data:",
+                      multiple = TRUE,
+                      accept = c(".csv", ".xlsx"),
+                      width = "100%"),
+            tableOutput(outputId = "uploaded_files"),
+            numericInput(inputId = "n_cycles",
+                         label = "Number of cycles:",
+                         value = 60,
+                         width = "100%"),
+            div(style = "text-align: center;",
+                actionButton(inputId = "go_button",
+                             label = "Process",
+                             icon = icon("paper-plane")),
+                downloadButton(outputId = "dl_button")
+            )
         )
     )
 )
@@ -120,7 +125,7 @@ server <- function(input, output, session) {
     striped = TRUE,
     rownames = TRUE,
     colnames = FALSE,
-    width = "100%")
+    width = "420px")
     observe({
         if (is.null(input$data_file)) {
             shinyjs::disable("go_button")
